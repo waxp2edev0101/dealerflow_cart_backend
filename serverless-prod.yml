@@ -1,0 +1,30 @@
+service: marketplace-v2-API
+plugins:
+  - serverless-offline
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: dev
+  region: us-east-1
+  timeout: 15
+  apiGateway:
+    minimumCompressionSize: 1024
+  environment:
+    MONGODB_CONNECTION_STRING: MONGODB_CONNECTION_STRING=mongodb+srv://michaeldunham:zCNW9UVX0Q5iy2iS@cluster0.wqykv.mongodb.net
+
+    MONGODB_VEHICLES_DB: inventory
+    MONGODB_VEHICLES_COLLECTION_CDN: cdn-inventory
+    MONGODB_VEHICLES_COLLECTION_US: us-inventory
+    
+    BASE_URL: "" # The base URL of the serverless function, may need to deploy twice at first to get this.
+    BASE_GUI_URL: 'http://localhost:5173/'
+    SUPPORT_URL: ''
+
+    NODE_ENV: dev
+
+functions:
+  app:
+    handler: dist/index.handler
+    events:
+      - http: ANY /
+      - http: "ANY /{proxy+}"
